@@ -3,196 +3,222 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>osu!mania Key/Note Image Generator</title>
+  <title>osu!mania Circle Generator</title>
+
   <style>
     :root{
-      --bg:#0b0f17;
-      --panel:#121a29;
-      --panel2:#0f1624;
-      --text:#e7eefc;
-      --muted:#a9b7d6;
-      --acc:#7aa7ff;
-      --ok:#2fe29a;
-      --warn:#ffcc66;
-      --bad:#ff6b6b;
-      --border: rgba(255,255,255,.08);
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --r:16px;
+      --text:#eef2ff;
+      --muted:rgba(238,242,255,.72);
+      --panel:rgba(10,12,16,.42);
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
     }
+
     *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
       font-family:var(--sans);
       color:var(--text);
-      background: radial-gradient(1200px 800px at 20% 10%, rgba(122,167,255,.18), transparent 60%),
-                  radial-gradient(900px 700px at 80% 20%, rgba(47,226,154,.10), transparent 55%),
-                  var(--bg);
+
+      /* Background image requested */
+      background-image:
+        linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.70)),
+        url("https://backiee.com/static/wallpapers/1000x563/414483.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
     }
-    header{
-      padding: 22px 18px 10px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    h1{
-      margin:0;
-      font-size: 20px;
-      letter-spacing:.2px;
-    }
-    header p{
-      margin:8px 0 0;
-      color:var(--muted);
-      line-height:1.35;
-      max-width: 90ch;
-    }
+
     .wrap{
-      max-width: 1200px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 14px 18px 28px;
+      padding: 28px 18px 40px;
       display:grid;
-      grid-template-columns: 420px 1fr;
+      grid-template-columns: 380px 1fr;
       gap: 14px;
     }
+
+    @media (max-width: 980px){
+      .wrap{grid-template-columns:1fr}
+    }
+
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
       border:1px solid var(--border);
       border-radius: var(--r);
+      background: var(--panel);
+      backdrop-filter: blur(6px);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
-    .card .hd{
-      padding: 14px 14px 10px;
-      background: rgba(0,0,0,.12);
-      border-bottom: 1px solid var(--border);
+
+    header.card{
+      grid-column: 1 / -1;
+      padding: 16px 16px 14px;
       display:flex;
-      align-items:center;
+      align-items:flex-end;
       justify-content:space-between;
       gap:12px;
     }
-    .card .hd b{font-size: 13px; letter-spacing:.2px}
-    .card .bd{padding: 14px}
+
+    h1{
+      margin:0;
+      font-size: 16px;
+      letter-spacing:.2px;
+      font-weight: 750;
+    }
+    .sub{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height:1.35;
+    }
+
+    .pill{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 6px 10px;
+      border:1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(0,0,0,.18);
+      white-space:nowrap;
+    }
+
+    .bd{padding: 14px}
+
+    .sectionTitle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin: 2px 0 10px;
+      color: rgba(255,255,255,.92);
+      font-size: 12px;
+      letter-spacing:.18px;
+      font-weight: 750;
+    }
+
     .grid{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
+
+    .grid1{display:grid; grid-template-columns: 1fr; gap:10px;}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+
     label{
       display:flex;
       flex-direction:column;
       gap:6px;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--muted);
     }
+
     input, select{
       width:100%;
       padding: 9px 10px;
-      border-radius: 12px;
+      border-radius: 14px;
       border:1px solid var(--border);
-      background: rgba(0,0,0,.25);
+      background: rgba(0,0,0,.22);
       color: var(--text);
       outline:none;
     }
+
     input[type="color"]{
       padding: 5px;
       height: 38px;
     }
-    .row{
+
+    input[type="checkbox"]{
+      width:auto;
+      transform: translateY(1px);
+      accent-color: white;
+    }
+
+    .toggle{
       display:flex;
       gap:10px;
-      flex-wrap:wrap;
       align-items:center;
+      padding: 10px 10px;
+      border:1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.85);
+      font-size: 12px;
     }
+    .toggle span{color: var(--muted); font-size: 11px}
+
     .btn{
       cursor:pointer;
       border:1px solid var(--border);
-      background: linear-gradient(180deg, rgba(122,167,255,.22), rgba(122,167,255,.08));
+      background: rgba(255,255,255,.10);
       color: var(--text);
       padding: 10px 12px;
       border-radius: 14px;
-      font-weight: 650;
+      font-weight: 750;
       letter-spacing:.2px;
-      box-shadow: 0 10px 20px rgba(0,0,0,.25);
       user-select:none;
     }
+    .btn.primary{
+      background: rgba(255,255,255,.16);
+    }
     .btn:active{transform: translateY(1px)}
-    .btn.secondary{
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
-      font-weight: 600;
-    }
-    .btn.ok{
-      background: linear-gradient(180deg, rgba(47,226,154,.22), rgba(47,226,154,.08));
-    }
-    .btn.warn{
-      background: linear-gradient(180deg, rgba(255,204,102,.22), rgba(255,204,102,.08));
-    }
-    .pill{
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--muted);
+
+    details{
       border:1px solid var(--border);
-      background: rgba(0,0,0,.18);
-      padding: 6px 10px;
-      border-radius: 999px;
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      white-space:nowrap;
+      border-radius: 14px;
+      overflow:hidden;
+      background: rgba(0,0,0,.14);
     }
-    .mono{
-      font-family: var(--mono);
+    details summary{
+      cursor:pointer;
+      padding: 10px 12px;
+      list-style:none;
       font-size: 12px;
+      font-weight: 700;
+      color: rgba(255,255,255,.90);
+      user-select:none;
+    }
+    details summary::-webkit-details-marker{display:none}
+    details .inner{padding: 12px; border-top:1px solid var(--border)}
+    .help{
       color: var(--muted);
+      font-size: 11px;
       line-height:1.35;
+      margin-top: 6px;
     }
-    .split{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .preview{
-      padding: 14px;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-    .canvasWrap{
-      background: rgba(0,0,0,.22);
-      border:1px solid var(--border);
-      border-radius: var(--r);
-      padding: 12px;
-      overflow:auto;
-    }
-    canvas{
-      background: #070a10;
-      border-radius: 12px;
-      border:1px solid rgba(255,255,255,.06);
-      display:block;
-      margin: 0 auto;
-    }
+
     .out{
+      padding: 14px;
       display:grid;
       grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
       gap: 10px;
     }
+
     .thumb{
       border:1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 16px;
       background: rgba(0,0,0,.18);
       overflow:hidden;
     }
-    .thumb .toph{
+    .thumb .top{
       padding: 10px 10px 8px;
       border-bottom: 1px solid var(--border);
       display:flex;
+      align-items:center;
       justify-content:space-between;
       gap:10px;
-      align-items:center;
     }
     .thumb b{
-      font-size: 12px;
       font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 800;
     }
     .thumb .img{
       padding: 10px;
@@ -201,10 +227,9 @@
       justify-items:center;
     }
     .thumb img{
-      max-width: 100%;
-      image-rendering: auto;
-      border-radius: 10px;
-      border:1px solid rgba(255,255,255,.06);
+      max-width:100%;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.08);
       background: rgba(255,255,255,.02);
     }
     .smallRow{
@@ -213,561 +238,733 @@
       flex-wrap:wrap;
       justify-content:center;
     }
-    .footerNote{
-      margin-top: 8px;
+
+    .statusLine{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 12px 14px;
+      border-top:1px solid var(--border);
       color: var(--muted);
-      font-size: 12px;
-      line-height:1.35;
-    }
-    @media (max-width: 980px){
-      .wrap{grid-template-columns:1fr}
+      font-size: 11px;
+      font-family: var(--mono);
     }
   </style>
 </head>
+
 <body>
-<header>
-  <h1>Gerador nerd de imagens (osu!mania): Keys + Notes</h1>
-  <p>
-    Ajuste HitPosition, tamanhos e estilo. O gerador cria PNGs base + downscale automaticamente.
-    Incluí também o cálculo pra alinhar a imagem no HitPosition (âncora no <span class="pill">bottom</span> ou no <span class="pill">center</span>).
-  </p>
-</header>
-
-<div class="wrap">
-
-  <section class="card">
-    <div class="hd">
-      <b>Configurações</b>
-      <span class="pill" id="statusPill">pronto</span>
-    </div>
-    <div class="bd">
-      <div class="grid">
-        <label>
-          ScreenHeight (base do osu)
-          <input id="screenH" type="number" value="480" min="100" step="1">
-        </label>
-        <label>
-          HitPosition (Y do hitline)
-          <input id="hitPos" type="number" value="458" min="0" step="1">
-        </label>
-
-        <label>
-          Alinhamento da KEY no HitPosition
-          <select id="anchorMode">
-            <option value="bottom">bottom (mais comum pra receptor)</option>
-            <option value="center">center (linha no meio da imagem)</option>
-          </select>
-        </label>
-
-        <label>
-          Número de teclas (k)
-          <input id="keyCount" type="number" value="4" min="1" max="18" step="1">
-        </label>
+  <div class="wrap">
+    <header class="card">
+      <div>
+        <h1>osu!mania • circle keys + circle notes</h1>
+        <div class="sub">Gera PNGs @2x e downscale (metade). Prefixos editáveis. Keys: normal + pressed. Notes: com trilha vertical (fade) opcional.</div>
       </div>
+      <div class="pill" id="statusPill">pronto</div>
+    </header>
 
-      <div class="split">
-        <div class="card" style="box-shadow:none;border-radius:14px;">
-          <div class="hd"><b>Keys</b><span class="pill">base 224×366 → 112×183</span></div>
-          <div class="bd">
-            <div class="grid">
-              <label>Key Base W <input id="keyW" type="number" value="224" min="8" step="1"></label>
-              <label>Key Base H <input id="keyH" type="number" value="366" min="8" step="1"></label>
-              <label>Cor principal <input id="keyColor" type="color" value="#7aa7ff"></label>
-              <label>Cor borda <input id="keyBorder" type="color" value="#0a1020"></label>
-              <label>Raio (cantos) <input id="keyRadius" type="number" value="26" min="0" step="1"></label>
-              <label>Brilho topo (0-1) <input id="keyShine" type="number" value="0.35" min="0" max="1" step="0.01"></label>
-            </div>
-          </div>
+    <!-- Controls -->
+    <section class="card">
+      <div class="bd">
+
+        <div class="sectionTitle">
+          <div>Geral</div>
+          <div class="pill">@2x + downscale</div>
         </div>
 
-        <div class="card" style="box-shadow:none;border-radius:14px;">
-          <div class="hd"><b>Notes</b><span class="pill">base 300×300 → 150×150</span></div>
-          <div class="bd">
-            <div class="grid">
-              <label>Note Base W <input id="noteW" type="number" value="300" min="8" step="1"></label>
-              <label>Note Base H <input id="noteH" type="number" value="300" min="8" step="1"></label>
-              <label>Cor principal <input id="noteColor" type="color" value="#2fe29a"></label>
-              <label>Cor borda <input id="noteBorder" type="color" value="#0a1020"></label>
-              <label>Raio (cantos) <input id="noteRadius" type="number" value="42" min="0" step="1"></label>
-              <label>Brilho topo (0-1) <input id="noteShine" type="number" value="0.30" min="0" max="1" step="0.01"></label>
-            </div>
+        <div class="grid1">
+          <label>
+            ColumnWidth (lista, por coluna)
+            <input id="colWidths" value="70,70,70,70" />
+            <div class="help">Use vírgulas. O tamanho automático do círculo usa a largura da coluna (por coluna).</div>
+          </label>
+
+          <div class="grid">
+            <label>
+              Fator (Keys)
+              <input id="keyFactor" type="number" value="1.60" min="0.10" max="4" step="0.01" />
+            </label>
+            <label>
+              Fator (Notes)
+              <input id="noteFactor" type="number" value="1.20" min="0.10" max="4" step="0.01" />
+            </label>
           </div>
+
+          <details>
+            <summary>Avançado (canvas / export)</summary>
+            <div class="inner grid1">
+              <div class="grid">
+                <label>
+                  Downscale (%)
+                  <input id="downPct" type="number" value="50" min="1" max="99" step="1" />
+                </label>
+                <label>
+                  Padding (px) (ao redor do círculo)
+                  <input id="padPx" type="number" value="18" min="0" max="200" step="1" />
+                </label>
+              </div>
+
+              <div class="toggle">
+                <input id="fixedCanvas" type="checkbox" />
+                <div>
+                  Canvas fixo (em vez de auto)
+                  <div><span>Se ligado, você define W×H para Keys e Notes.</span></div>
+                </div>
+              </div>
+
+              <div class="grid">
+                <label>
+                  Keys canvas W (@2x)
+                  <input id="keyCanvasW" type="number" value="224" min="16" step="1" />
+                </label>
+                <label>
+                  Keys canvas H (@2x)
+                  <input id="keyCanvasH" type="number" value="366" min="16" step="1" />
+                </label>
+              </div>
+
+              <div class="grid">
+                <label>
+                  Notes canvas W (@2x)
+                  <input id="noteCanvasW" type="number" value="300" min="16" step="1" />
+                </label>
+                <label>
+                  Notes canvas H (@2x)
+                  <input id="noteCanvasH" type="number" value="300" min="16" step="1" />
+                </label>
+              </div>
+            </div>
+          </details>
         </div>
+
+        <div style="height:14px"></div>
+
+        <div class="sectionTitle">
+          <div>Keys</div>
+          <div class="pill">4 imagens</div>
+        </div>
+
+        <div class="grid1">
+          <div class="grid">
+            <label>
+              Prefixo (normal)
+              <input id="keyPrefix" value="mania-key" />
+            </label>
+            <label>
+              Prefixo (pressed)
+              <input id="keyPressedPrefix" value="mania-keyD" />
+            </label>
+          </div>
+
+          <div class="grid">
+            <label>
+              Outline cor
+              <input id="keyOutlineColor" type="color" value="#ffffff" />
+            </label>
+            <label>
+              Outline px (@2x)
+              <input id="keyOutlinePx" type="number" value="10" min="0" max="200" step="1" />
+            </label>
+          </div>
+
+          <div class="grid">
+            <label>
+              Interior preenchido?
+              <select id="keyFillMode">
+                <option value="hollow">não (vazado / ring)</option>
+                <option value="filled">sim (tampado)</option>
+              </select>
+            </label>
+            <label>
+              Interior cor
+              <input id="keyFillColor" type="color" value="#7f7f7f" />
+            </label>
+          </div>
+
+          <details>
+            <summary>Pressed (diferenças)</summary>
+            <div class="inner grid1">
+              <div class="grid">
+                <label>
+                  Pressed outline cor
+                  <input id="keyPressedOutlineColor" type="color" value="#ffffff" />
+                </label>
+                <label>
+                  Pressed outline px (@2x)
+                  <input id="keyPressedOutlinePx" type="number" value="10" min="0" max="200" step="1" />
+                </label>
+              </div>
+              <div class="grid">
+                <label>
+                  Pressed fill mode
+                  <select id="keyPressedFillMode">
+                    <option value="inherit">igual normal</option>
+                    <option value="hollow">vazado</option>
+                    <option value="filled">tampado</option>
+                  </select>
+                </label>
+                <label>
+                  Pressed fill cor
+                  <input id="keyPressedFillColor" type="color" value="#5c5c5c" />
+                </label>
+              </div>
+              <div class="help">Se Pressed fill mode = “igual normal”, a cor/filled do normal é usada.</div>
+            </div>
+          </details>
+        </div>
+
+        <div style="height:14px"></div>
+
+        <div class="sectionTitle">
+          <div>Notes</div>
+          <div class="pill">+ trilha (fade)</div>
+        </div>
+
+        <div class="grid1">
+          <label>
+            Prefixo (note)
+            <input id="notePrefix" value="mania-note" />
+          </label>
+
+          <div class="grid">
+            <label>
+              Outline cor
+              <input id="noteOutlineColor" type="color" value="#ffffff" />
+            </label>
+            <label>
+              Outline px (@2x)
+              <input id="noteOutlinePx" type="number" value="10" min="0" max="200" step="1" />
+            </label>
+          </div>
+
+          <div class="grid">
+            <label>
+              Interior preenchido?
+              <select id="noteFillMode">
+                <option value="filled">sim (tampado)</option>
+                <option value="hollow">não (vazado / ring)</option>
+              </select>
+            </label>
+            <label>
+              Interior cor
+              <input id="noteFillColor" type="color" value="#bdbdbd" />
+            </label>
+          </div>
+
+          <details>
+            <summary>Trilha vertical (fade)</summary>
+            <div class="inner grid1">
+              <div class="toggle">
+                <input id="trailOn" type="checkbox" checked />
+                <div>
+                  Ativar trilha
+                  <div><span>Uma faixa vertical atrás do círculo, com fade pra cima.</span></div>
+                </div>
+              </div>
+
+              <div class="grid">
+                <label>
+                  Cor da trilha
+                  <input id="trailColor" type="color" value="#bdbdbd" />
+                </label>
+                <label>
+                  Opacidade (0-1)
+                  <input id="trailAlpha" type="number" value="0.55" min="0" max="1" step="0.01" />
+                </label>
+              </div>
+
+              <div class="grid">
+                <label>
+                  Largura (% do diâmetro)
+                  <input id="trailWidthPct" type="number" value="35" min="1" max="200" step="1" />
+                </label>
+                <label>
+                  Comprimento (% do canvas)
+                  <input id="trailLenPct" type="number" value="100" min="1" max="200" step="1" />
+                </label>
+              </div>
+
+              <div class="grid">
+                <label>
+                  Fade power (curva)
+                  <input id="trailPower" type="number" value="1.8" min="0.1" max="8" step="0.1" />
+                </label>
+                <label>
+                  Offset Y (px)
+                  <input id="trailYOffset" type="number" value="0" min="-999" max="999" step="1" />
+                </label>
+              </div>
+
+              <div class="help">“Fade power” maior = some mais rápido. Offset Y move o círculo/trilha pra cima/baixo dentro do canvas fixo.</div>
+            </div>
+          </details>
+        </div>
+
+        <div style="height:14px"></div>
+
+        <div class="row">
+          <button class="btn primary" id="genBtn">Gerar</button>
+          <button class="btn" id="zipBtn">Baixar ZIP</button>
+          <button class="btn" id="clearBtn">Limpar</button>
+        </div>
+
       </div>
 
-      <div class="row" style="margin-top:12px;">
-        <button class="btn ok" id="genBtn">Gerar tudo</button>
-        <button class="btn secondary" id="clearBtn">Limpar saída</button>
-        <button class="btn warn" id="zipBtn">Baixar ZIP</button>
+      <div class="statusLine">
+        <span id="hintLine">Keys: normal/pressed (@2x + downscale) • Notes: (@2x + downscale)</span>
+        <span id="fileCount">0 arquivos</span>
       </div>
+    </section>
 
-      <div class="footerNote mono" id="calcBox" style="margin-top:12px;"></div>
-    </div>
-  </section>
-
-  <section class="card">
-    <div class="hd">
-      <b>Preview + Saída</b>
-      <span class="pill">sem dependências pesadas</span>
-    </div>
-
-    <div class="preview">
-      <div class="canvasWrap">
-        <canvas id="preview" width="520" height="520"></canvas>
-        <div class="footerNote mono" id="previewLegend"></div>
-      </div>
-
+    <!-- Output -->
+    <section class="card">
       <div class="out" id="out"></div>
-    </div>
-  </section>
+    </section>
+  </div>
 
-</div>
+  <!-- JSZip (pra ZIP). Se não carregar, ainda dá pra baixar individual. -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
-<!-- JSZip via CDN (para zip). Se você quiser 100% offline, eu te adapto pra baixar individualmente sem ZIP. -->
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
 
-<script>
-/* ----------------------------- helpers ----------------------------- */
-const $ = (id) => document.getElementById(id);
+    function setStatus(txt){ $("statusPill").textContent = txt; }
+    function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
+    function round(n){ return Math.round(n); }
 
-function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
-
-function hexToRgba(hex, a=1){
-  const h = hex.replace("#","");
-  const r = parseInt(h.slice(0,2), 16);
-  const g = parseInt(h.slice(2,4), 16);
-  const b = parseInt(h.slice(4,6), 16);
-  return `rgba(${r},${g},${b},${a})`;
-}
-
-function roundRectPath(ctx, x, y, w, h, r){
-  r = clamp(r, 0, Math.min(w,h)/2);
-  ctx.beginPath();
-  ctx.moveTo(x+r, y);
-  ctx.arcTo(x+w, y, x+w, y+h, r);
-  ctx.arcTo(x+w, y+h, x, y+h, r);
-  ctx.arcTo(x, y+h, x, y, r);
-  ctx.arcTo(x, y, x+w, y, r);
-  ctx.closePath();
-}
-
-function setStatus(text){
-  $("statusPill").textContent = text;
-}
-
-function downloadBlob(blob, filename){
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url), 1200);
-}
-
-async function canvasToBlob(canvas){
-  return await new Promise((res)=>canvas.toBlob(res, "image/png"));
-}
-
-function makeCanvas(w,h){
-  const c = document.createElement("canvas");
-  c.width = Math.max(1, Math.floor(w));
-  c.height = Math.max(1, Math.floor(h));
-  return c;
-}
-
-function downscaleCanvas(srcCanvas, targetW, targetH){
-  const dst = makeCanvas(targetW, targetH);
-  const dctx = dst.getContext("2d");
-  dctx.imageSmoothingEnabled = true;
-  dctx.imageSmoothingQuality = "high";
-  dctx.clearRect(0,0,dst.width,dst.height);
-  dctx.drawImage(srcCanvas, 0,0, dst.width, dst.height);
-  return dst;
-}
-
-/* ------------------------- draw styles ---------------------------- */
-function drawFancyTile(ctx, w, h, opts){
-  const {
-    fill="#7aa7ff",
-    border="#0a1020",
-    radius=24,
-    shine=0.35,
-    label=""
-  } = opts;
-
-  ctx.clearRect(0,0,w,h);
-
-  // background (subtle)
-  const bg = ctx.createLinearGradient(0,0,0,h);
-  bg.addColorStop(0, "rgba(255,255,255,0.03)");
-  bg.addColorStop(1, "rgba(0,0,0,0.15)");
-  ctx.fillStyle = bg;
-  ctx.fillRect(0,0,w,h);
-
-  // main shape
-  const pad = Math.max(2, Math.round(Math.min(w,h)*0.06));
-  const x = pad, y = pad, ww = w-pad*2, hh = h-pad*2;
-
-  // base gradient
-  const g = ctx.createLinearGradient(0, y, 0, y+hh);
-  g.addColorStop(0, hexToRgba(fill, 0.95));
-  g.addColorStop(1, hexToRgba(fill, 0.55));
-  ctx.fillStyle = g;
-
-  roundRectPath(ctx, x, y, ww, hh, radius);
-  ctx.fill();
-
-  // shine top
-  const sh = ctx.createLinearGradient(0, y, 0, y+hh*0.6);
-  sh.addColorStop(0, "rgba(255,255,255," + shine + ")");
-  sh.addColorStop(1, "rgba(255,255,255,0)");
-  ctx.fillStyle = sh;
-  roundRectPath(ctx, x, y, ww, hh, radius);
-  ctx.fill();
-
-  // inner line
-  ctx.strokeStyle = "rgba(255,255,255,0.18)";
-  ctx.lineWidth = Math.max(1, Math.round(Math.min(w,h)*0.012));
-  roundRectPath(ctx, x+ctx.lineWidth, y+ctx.lineWidth, ww-ctx.lineWidth*2, hh-ctx.lineWidth*2, Math.max(0, radius-ctx.lineWidth));
-  ctx.stroke();
-
-  // border
-  ctx.strokeStyle = hexToRgba(border, 0.95);
-  ctx.lineWidth = Math.max(1, Math.round(Math.min(w,h)*0.018));
-  roundRectPath(ctx, x, y, ww, hh, radius);
-  ctx.stroke();
-
-  // label (debug-ish)
-  if(label){
-    ctx.font = `700 ${Math.max(12, Math.round(Math.min(w,h)*0.12))}px ${getComputedStyle(document.body).fontFamily}`;
-    ctx.fillStyle = "rgba(0,0,0,0.35)";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(label, w/2, h/2);
-  }
-}
-
-/* ------------------------- generation ----------------------------- */
-function getConfig(){
-  const screenH = Number($("screenH").value);
-  const hitPos = Number($("hitPos").value);
-  const anchorMode = $("anchorMode").value;
-  const keyCount = clamp(Number($("keyCount").value), 1, 18);
-
-  const keyW = Number($("keyW").value);
-  const keyH = Number($("keyH").value);
-  const noteW = Number($("noteW").value);
-  const noteH = Number($("noteH").value);
-
-  return {
-    screenH, hitPos, anchorMode, keyCount,
-    key: {
-      w:keyW, h:keyH,
-      color:$("keyColor").value,
-      border:$("keyBorder").value,
-      radius:Number($("keyRadius").value),
-      shine:Number($("keyShine").value),
-      baseDownscale: { w: Math.round(keyW/2), h: Math.round(keyH/2) }
-    },
-    note: {
-      w:noteW, h:noteH,
-      color:$("noteColor").value,
-      border:$("noteBorder").value,
-      radius:Number($("noteRadius").value),
-      shine:Number($("noteShine").value),
-      baseDownscale: { w: Math.round(noteW/2), h: Math.round(noteH/2) }
+    function hexToRgb(hex){
+      const h = hex.replace("#","");
+      return {
+        r: parseInt(h.slice(0,2),16),
+        g: parseInt(h.slice(2,4),16),
+        b: parseInt(h.slice(4,6),16),
+      };
     }
-  };
-}
+    function rgba(hex, a){
+      const {r,g,b} = hexToRgb(hex);
+      return `rgba(${r},${g},${b},${a})`;
+    }
 
-function updateCalcUI(){
-  const cfg = getConfig();
-  const H = cfg.screenH;
-  const y = cfg.hitPos;
+    function downloadBlob(blob, filename){
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 1200);
+    }
 
-  const keyH = cfg.key.h;
+    function makeCanvas(w,h){
+      const c = document.createElement("canvas");
+      c.width = Math.max(1, Math.floor(w));
+      c.height = Math.max(1, Math.floor(h));
+      return c;
+    }
 
-  // where the top of the key image would land in screen coords (for preview)
-  const topBottomAnchor = y - keyH;
-  const topCenterAnchor = y - keyH/2;
+    async function canvasToBlob(canvas){
+      return await new Promise(res => canvas.toBlob(res, "image/png"));
+    }
 
-  const maxCenterFit = 2 * Math.min(y, H - y);
-  const maxBottomFit = y; // if anchored by bottom, it fits if keyH <= hitPos (top >= 0)
+    function downscaleCanvas(srcCanvas, pct){
+      const t = clamp(pct, 1, 99) / 100;
+      const w = Math.max(1, Math.floor(srcCanvas.width * t));
+      const h = Math.max(1, Math.floor(srcCanvas.height * t));
+      const dst = makeCanvas(w, h);
+      const ctx = dst.getContext("2d");
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(srcCanvas, 0, 0, w, h);
+      return dst;
+    }
 
-  const lines = [];
-  lines.push(`<span class="pill">Cálculos</span>`);
-  lines.push(`<div class="mono" style="margin-top:8px">`);
-  lines.push(`• <b>Bottom-anchor</b>: <span class="pill">top = hitPos - keyH</span> ⇒ top = ${y} - ${keyH} = <b>${Math.round(topBottomAnchor)}</b> px`);
-  lines.push(`<br>• <b>Center-anchor</b>: <span class="pill">top = hitPos - keyH/2</span> ⇒ top = ${y} - ${keyH/2} = <b>${Math.round(topCenterAnchor)}</b> px`);
-  lines.push(`<br><br>Pra escolher um <b>keyH</b> que “caiba” sem cortar:`);
-  lines.push(`<br>• Se for <b>center-anchor</b>: <span class="pill">keyH ≤ 2 * min(hitPos, screenH - hitPos)</span> ⇒ máximo ≈ <b>${Math.floor(maxCenterFit)}</b> px`);
-  lines.push(`<br>• Se for <b>bottom-anchor</b>: <span class="pill">keyH ≤ hitPos</span> ⇒ máximo ≈ <b>${Math.floor(maxBottomFit)}</b> px`);
-  lines.push(`</div>`);
+    function parseColWidths(str){
+      const parts = str.split(",").map(s=>s.trim()).filter(Boolean);
+      const nums = parts.map(p=>Number(p)).filter(n=>Number.isFinite(n) && n>0);
+      return nums.length ? nums : [70,70,70,70];
+    }
 
-  $("calcBox").innerHTML = lines.join("");
-}
+    function getCfg(){
+      const colWidths = parseColWidths($("colWidths").value);
+      const fixedCanvas = $("fixedCanvas").checked;
+      const downPct = clamp(Number($("downPct").value), 1, 99);
+      const padPx = clamp(Number($("padPx").value), 0, 200);
 
-function drawPreview(){
-  const cfg = getConfig();
-  const canvas = $("preview");
-  const ctx = canvas.getContext("2d");
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+      const keyFactor = Number($("keyFactor").value);
+      const noteFactor = Number($("noteFactor").value);
 
-  // coordinate map: we display a "screen" area of height cfg.screenH inside preview
-  const pad = 28;
-  const viewW = canvas.width - pad*2;
-  const viewH = canvas.height - pad*2;
+      const cfg = {
+        colWidths,
+        fixedCanvas,
+        downPct,
+        padPx,
+        key: {
+          prefix: $("keyPrefix").value.trim() || "mania-key",
+          pressedPrefix: $("keyPressedPrefix").value.trim() || "mania-keyD",
+          factor: keyFactor,
+          outlineColor: $("keyOutlineColor").value,
+          outlinePx2x: clamp(Number($("keyOutlinePx").value), 0, 999),
+          fillMode: $("keyFillMode").value, // hollow | filled
+          fillColor: $("keyFillColor").value,
 
-  // draw playfield box
-  ctx.fillStyle = "rgba(255,255,255,0.03)";
-  ctx.fillRect(pad, pad, viewW, viewH);
-  ctx.strokeStyle = "rgba(255,255,255,0.10)";
-  ctx.lineWidth = 1;
-  ctx.strokeRect(pad, pad, viewW, viewH);
+          pressed: {
+            outlineColor: $("keyPressedOutlineColor").value,
+            outlinePx2x: clamp(Number($("keyPressedOutlinePx").value), 0, 999),
+            fillMode: $("keyPressedFillMode").value, // inherit | hollow | filled
+            fillColor: $("keyPressedFillColor").value,
+          },
 
-  // map y (0..screenH) to preview
-  const H = cfg.screenH;
-  const yHit = cfg.hitPos;
-  const mapY = (y) => pad + (y / H) * viewH;
+          canvas2x: {
+            w: clamp(Number($("keyCanvasW").value), 16, 4096),
+            h: clamp(Number($("keyCanvasH").value), 16, 4096),
+          },
+        },
+        note: {
+          prefix: $("notePrefix").value.trim() || "mania-note",
+          factor: noteFactor,
+          outlineColor: $("noteOutlineColor").value,
+          outlinePx2x: clamp(Number($("noteOutlinePx").value), 0, 999),
+          fillMode: $("noteFillMode").value, // hollow | filled
+          fillColor: $("noteFillColor").value,
 
-  // hit line
-  const yh = mapY(yHit);
-  ctx.strokeStyle = "rgba(255,204,102,0.85)";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(pad, yh);
-  ctx.lineTo(pad+viewW, yh);
-  ctx.stroke();
+          trail: {
+            on: $("trailOn").checked,
+            color: $("trailColor").value,
+            alpha: clamp(Number($("trailAlpha").value), 0, 1),
+            widthPct: clamp(Number($("trailWidthPct").value), 1, 200),
+            lenPct: clamp(Number($("trailLenPct").value), 1, 200),
+            power: clamp(Number($("trailPower").value), 0.1, 20),
+            yOffset: clamp(Number($("trailYOffset").value), -9999, 9999),
+          },
 
-  // key rect position with chosen anchor
-  const keyH = cfg.key.h;
-  const keyW = cfg.key.w;
-  const anchor = cfg.anchorMode;
+          canvas2x: {
+            w: clamp(Number($("noteCanvasW").value), 16, 4096),
+            h: clamp(Number($("noteCanvasH").value), 16, 4096),
+          },
+        }
+      };
 
-  let topScreen;
-  if(anchor === "bottom") topScreen = yHit - keyH;
-  else topScreen = yHit - keyH/2;
+      return cfg;
+    }
 
-  const keyTopY = mapY(topScreen);
-  const keyBottomY = mapY(topScreen + keyH);
+    function computeDiameter2xFromColWidth(colWidth, factor){
+      // We treat ColumnWidth as @1x baseline, and generate @1x diameter = colWidth * factor.
+      // Then @2x diameter is double (classic @2x).
+      const d1 = colWidth * factor;
+      return Math.max(1, Math.round(d1 * 2));
+    }
 
-  // scale key box width relative
-  const boxW = clamp((keyW / 224) * 120, 60, 220);
-  const boxX = pad + (viewW - boxW)/2;
+    function clearOut(){
+      $("out").innerHTML = "";
+      generatedFiles = [];
+      $("fileCount").textContent = "0 arquivos";
+      setStatus("limpo");
+    }
 
-  // draw key box
-  ctx.fillStyle = "rgba(122,167,255,0.18)";
-  ctx.fillRect(boxX, keyTopY, boxW, keyBottomY - keyTopY);
-  ctx.strokeStyle = "rgba(122,167,255,0.75)";
-  ctx.lineWidth = 2;
-  ctx.strokeRect(boxX, keyTopY, boxW, keyBottomY - keyTopY);
+    function addThumb(title, items){
+      const out = $("out");
+      const wrap = document.createElement("div");
+      wrap.className = "thumb";
 
-  // text
-  ctx.fillStyle = "rgba(231,238,252,0.85)";
-  ctx.font = `600 12px ${getComputedStyle(document.body).fontFamily}`;
-  ctx.textAlign = "left";
-  ctx.textBaseline = "top";
-  ctx.fillText(`screenH=${H}px | hitPos=${yHit}px | anchor=${anchor}`, pad, 8);
+      const top = document.createElement("div");
+      top.className = "top";
+      const b = document.createElement("b");
+      b.textContent = title;
+      top.appendChild(b);
 
-  $("previewLegend").textContent =
-    `Linha amarela = HitPosition. Retângulo azul = onde a KEY cairia na tela com o anchor escolhido (sem “mágica”, só matemática).`;
-}
+      const imgBox = document.createElement("div");
+      imgBox.className = "img";
 
-function addThumbBlock(title, images){
-  const out = $("out");
-  const wrap = document.createElement("div");
-  wrap.className = "thumb";
+      items.forEach(({name, blob})=>{
+        const url = URL.createObjectURL(blob);
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = name;
+        imgBox.appendChild(img);
+      });
 
-  const top = document.createElement("div");
-  top.className = "toph";
+      const btnRow = document.createElement("div");
+      btnRow.className = "smallRow";
+      items.forEach(({name, blob})=>{
+        const btn = document.createElement("button");
+        btn.className = "btn";
+        btn.style.padding = "7px 10px";
+        btn.textContent = "baixar " + name;
+        btn.onclick = ()=>downloadBlob(blob, name);
+        btnRow.appendChild(btn);
+      });
 
-  const b = document.createElement("b");
-  b.textContent = title;
+      imgBox.appendChild(btnRow);
 
-  const btnRow = document.createElement("div");
-  btnRow.className = "row";
+      wrap.appendChild(top);
+      wrap.appendChild(imgBox);
+      out.appendChild(wrap);
+    }
 
-  top.appendChild(b);
-  top.appendChild(btnRow);
+    function drawCircle(ctx, cx, cy, r, opts){
+      const {
+        outlinePx=10,
+        outlineColor="#ffffff",
+        fillMode="hollow", // hollow|filled
+        fillColor="#777777"
+      } = opts;
 
-  const imgBox = document.createElement("div");
-  imgBox.className = "img";
+      ctx.save();
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
 
-  const smallRow = document.createElement("div");
-  smallRow.className = "smallRow";
+      // Fill
+      if(fillMode === "filled"){
+        ctx.beginPath();
+        ctx.arc(cx, cy, r - outlinePx/2, 0, Math.PI*2);
+        ctx.closePath();
+        ctx.fillStyle = fillColor;
+        ctx.fill();
+      }
 
-  images.forEach(({name, url, blob})=>{
-    const img = document.createElement("img");
-    img.src = url;
-    img.alt = name;
-    imgBox.appendChild(img);
+      // Outline
+      if(outlinePx > 0){
+        ctx.beginPath();
+        ctx.arc(cx, cy, r - outlinePx/2, 0, Math.PI*2);
+        ctx.closePath();
+        ctx.strokeStyle = outlineColor;
+        ctx.lineWidth = outlinePx;
+        ctx.stroke();
+      }
 
-    const dl = document.createElement("button");
-    dl.className = "btn secondary";
-    dl.style.padding = "7px 10px";
-    dl.style.borderRadius = "12px";
-    dl.textContent = "baixar " + name;
-    dl.onclick = ()=> downloadBlob(blob, name);
-    smallRow.appendChild(dl);
-  });
+      ctx.restore();
+    }
 
-  imgBox.appendChild(smallRow);
+    function drawNoteTrail(ctx, cx, cy, d, canvasW, canvasH, trail){
+      if(!trail.on) return;
 
-  wrap.appendChild(top);
-  wrap.appendChild(imgBox);
-  out.appendChild(wrap);
-}
+      const width = Math.max(1, Math.round(d * (trail.widthPct/100)));
+      const len = Math.max(1, Math.round(canvasH * (trail.lenPct/100)));
 
-let generatedFiles = []; // {name, blob}
+      // Trail goes upwards from the circle center (or slightly below if you prefer)
+      const x = Math.round(cx - width/2);
+      const yBottom = Math.round(cy + d*0.10);         // start near the circle lower-middle
+      const yTop = Math.round(yBottom - len);
 
-/* ----------------------------- main gen --------------------------- */
-async function generateAll(){
-  setStatus("gerando…");
-  $("out").innerHTML = "";
-  generatedFiles = [];
+      // Gradient alpha curve (power)
+      // We'll draw as many small strips to approximate curve cleanly without heavy math UI.
+      const steps = 140;
+      for(let i=0;i<steps;i++){
+        const t0 = i/steps;
+        const t1 = (i+1)/steps;
 
-  const cfg = getConfig();
+        const yy0 = yBottom + (yTop - yBottom)*t0;
+        const yy1 = yBottom + (yTop - yBottom)*t1;
 
-  // Generate Keys (k variants)
-  for(let i=1;i<=cfg.keyCount;i++){
-    const c = makeCanvas(cfg.key.w, cfg.key.h);
-    const ctx = c.getContext("2d");
-    drawFancyTile(ctx, c.width, c.height, {
-      fill: cfg.key.color,
-      border: cfg.key.border,
-      radius: cfg.key.radius,
-      shine: cfg.key.shine,
-      label: String(i)
-    });
+        // alpha decays with power
+        const a0 = trail.alpha * Math.pow(1 - t0, trail.power);
+        const a1 = trail.alpha * Math.pow(1 - t1, trail.power);
 
-    const down = downscaleCanvas(c, cfg.key.baseDownscale.w, cfg.key.baseDownscale.h);
+        const grad = ctx.createLinearGradient(0, yy0, 0, yy1);
+        grad.addColorStop(0, rgba(trail.color, a0));
+        grad.addColorStop(1, rgba(trail.color, a1));
 
-    const blobBase = await canvasToBlob(c);
-    const blobDown = await canvasToBlob(down);
+        ctx.fillStyle = grad;
+        ctx.fillRect(x, yy1, width, Math.abs(yy1-yy0)+1);
+      }
+    }
 
-    const nameBase = `mania-key${i}.png`;
-    const nameDown = `mania-key${i}@2xdown.png`; // nome livre (você pode renomear depois)
+    function computeCanvasAuto(d2x, padPx, fixedW, fixedH, fixedCanvas){
+      if(fixedCanvas){
+        return { w: fixedW, h: fixedH };
+      }
+      const w = d2x + padPx*2;
+      const h = d2x + padPx*2;
+      return { w: Math.max(1, Math.round(w)), h: Math.max(1, Math.round(h)) };
+    }
 
-    generatedFiles.push({name:nameBase, blob:blobBase});
-    generatedFiles.push({name:nameDown, blob:blobDown});
+    let generatedFiles = []; // {name, blob}
 
-    const urlBase = URL.createObjectURL(blobBase);
-    const urlDown = URL.createObjectURL(blobDown);
+    async function generate(){
+      setStatus("gerando…");
+      $("out").innerHTML = "";
+      generatedFiles = [];
 
-    addThumbBlock(`Key ${i}`, [
-      {name: nameBase, url:urlBase, blob: blobBase},
-      {name: nameDown, url:urlDown, blob: blobDown},
-    ]);
-  }
+      const cfg = getCfg();
+      const downPct = cfg.downPct;
 
-  // Generate Notes (k variants)
-  for(let i=1;i<=cfg.keyCount;i++){
-    const c = makeCanvas(cfg.note.w, cfg.note.h);
-    const ctx = c.getContext("2d");
+      // We'll base sizes on the first column (you can extend later to per-column outputs if you want).
+      // Since you asked for only a small fixed set of files, we keep it single-size, derived from colWidths[0].
+      const cw = cfg.colWidths[0];
 
-    // Slightly vary color by column (tiny shift) while still using base color:
-    // We'll draw same tile but add a subtle overlay.
-    drawFancyTile(ctx, c.width, c.height, {
-      fill: cfg.note.color,
-      border: cfg.note.border,
-      radius: cfg.note.radius,
-      shine: cfg.note.shine,
-      label: ""
-    });
+      // ---------- KEYS (4 images total) ----------
+      const keyD2x = computeDiameter2xFromColWidth(cw, cfg.key.factor);
 
-    // overlay “gem” stripe so notes look different from keys
-    ctx.save();
-    ctx.globalAlpha = 0.18;
-    ctx.fillStyle = "rgba(255,255,255,1)";
-    ctx.beginPath();
-    ctx.moveTo(0, c.height*0.25);
-    ctx.lineTo(c.width, c.height*0.05);
-    ctx.lineTo(c.width, c.height*0.15);
-    ctx.lineTo(0, c.height*0.35);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
+      const keyCanvas = computeCanvasAuto(
+        keyD2x,
+        cfg.padPx,
+        cfg.key.canvas2x.w,
+        cfg.key.canvas2x.h,
+        cfg.fixedCanvas
+      );
 
-    // center mark
-    ctx.save();
-    ctx.globalAlpha = 0.12;
-    ctx.strokeStyle = "rgba(0,0,0,1)";
-    ctx.lineWidth = Math.max(2, Math.round(Math.min(c.width,c.height)*0.035));
-    ctx.beginPath();
-    ctx.arc(c.width/2, c.height/2, Math.min(c.width,c.height)*0.18, 0, Math.PI*2);
-    ctx.stroke();
-    ctx.restore();
+      // Normal key @2x
+      const key2x = makeCanvas(keyCanvas.w, keyCanvas.h);
+      {
+        const ctx = key2x.getContext("2d");
+        ctx.clearRect(0,0,key2x.width,key2x.height);
+        const cx = key2x.width/2;
+        const cy = key2x.height/2;
+        const r = keyD2x/2;
 
-    const down = downscaleCanvas(c, cfg.note.baseDownscale.w, cfg.note.baseDownscale.h);
+        drawCircle(ctx, cx, cy, r, {
+          outlinePx: cfg.key.outlinePx2x,
+          outlineColor: cfg.key.outlineColor,
+          fillMode: cfg.key.fillMode,
+          fillColor: cfg.key.fillColor
+        });
+      }
 
-    const blobBase = await canvasToBlob(c);
-    const blobDown = await canvasToBlob(down);
+      const keyDown = downscaleCanvas(key2x, downPct);
 
-    const nameBase = `mania-note${i}.png`;
-    const nameDown = `mania-note${i}@2xdown.png`;
+      // Pressed key @2x
+      const keyPressed2x = makeCanvas(keyCanvas.w, keyCanvas.h);
+      {
+        const ctx = keyPressed2x.getContext("2d");
+        ctx.clearRect(0,0,keyPressed2x.width,keyPressed2x.height);
+        const cx = keyPressed2x.width/2;
+        const cy = keyPressed2x.height/2;
+        const r = keyD2x/2;
 
-    generatedFiles.push({name:nameBase, blob:blobBase});
-    generatedFiles.push({name:nameDown, blob:blobDown});
+        const pm = cfg.key.pressed.fillMode;
+        const useFillMode = (pm === "inherit") ? cfg.key.fillMode : pm;
+        const useFillColor = (pm === "inherit") ? cfg.key.fillColor : cfg.key.pressed.fillColor;
 
-    const urlBase = URL.createObjectURL(blobBase);
-    const urlDown = URL.createObjectURL(blobDown);
+        drawCircle(ctx, cx, cy, r, {
+          outlinePx: cfg.key.pressed.outlinePx2x,
+          outlineColor: cfg.key.pressed.outlineColor,
+          fillMode: useFillMode,
+          fillColor: useFillColor
+        });
+      }
 
-    addThumbBlock(`Note ${i}`, [
-      {name: nameBase, url:urlBase, blob: blobBase},
-      {name: nameDown, url:urlDown, blob: blobDown},
-    ]);
-  }
+      const keyPressedDown = downscaleCanvas(keyPressed2x, downPct);
 
-  setStatus("pronto ✅");
-}
+      // Name convention:
+      // - @2x files: prefix + "@2x.png"
+      // - downscale: prefix + ".png"
+      // You can change these names anytime; they’re fully driven by the prefixes.
+      const key2xName = `${cfg.key.prefix}@2x.png`;
+      const keyDownName = `${cfg.key.prefix}.png`;
+      const keyP2xName = `${cfg.key.pressedPrefix}@2x.png`;
+      const keyPDownName = `${cfg.key.pressedPrefix}.png`;
 
-async function downloadZip(){
-  if(!generatedFiles.length){
-    setStatus("nada pra zipar");
-    return;
-  }
-  setStatus("zipando…");
+      const key2xBlob = await canvasToBlob(key2x);
+      const keyDownBlob = await canvasToBlob(keyDown);
+      const keyP2xBlob = await canvasToBlob(keyPressed2x);
+      const keyPDownBlob = await canvasToBlob(keyPressedDown);
 
-  if(typeof JSZip === "undefined"){
-    alert("JSZip não carregou. Se você quer 100% offline, eu adapto o site pra baixar tudo individual sem ZIP.");
-    setStatus("sem JSZip");
-    return;
-  }
+      generatedFiles.push({name:key2xName, blob:key2xBlob});
+      generatedFiles.push({name:keyDownName, blob:keyDownBlob});
+      generatedFiles.push({name:keyP2xName, blob:keyP2xBlob});
+      generatedFiles.push({name:keyPDownName, blob:keyPDownBlob});
 
-  const zip = new JSZip();
-  const folder = zip.folder("osu-mania-images");
-  for(const f of generatedFiles){
-    folder.file(f.name, f.blob);
-  }
-  const blob = await zip.generateAsync({type:"blob"});
-  downloadBlob(blob, "osu-mania-images.zip");
-  setStatus("pronto ✅");
-}
+      addThumb("keys", [
+        {name:key2xName, blob:key2xBlob},
+        {name:keyDownName, blob:keyDownBlob},
+        {name:keyP2xName, blob:keyP2xBlob},
+        {name:keyPDownName, blob:keyPDownBlob},
+      ]);
 
-/* --------------------------- wiring ------------------------------- */
-function bind(){
-  const ids = ["screenH","hitPos","anchorMode","keyCount","keyW","keyH","noteW","noteH","keyColor","keyBorder","keyRadius","keyShine","noteColor","noteBorder","noteRadius","noteShine"];
-  ids.forEach(id=>{
-    $(id).addEventListener("input", ()=>{
-      updateCalcUI();
-      drawPreview();
-    });
-  });
+      // ---------- NOTES (2 images) ----------
+      const noteD2x = computeDiameter2xFromColWidth(cw, cfg.note.factor);
 
-  $("genBtn").addEventListener("click", generateAll);
-  $("clearBtn").addEventListener("click", ()=>{
-    $("out").innerHTML = "";
-    generatedFiles = [];
-    setStatus("limpo");
-  });
-  $("zipBtn").addEventListener("click", downloadZip);
+      const noteCanvas = computeCanvasAuto(
+        noteD2x,
+        cfg.padPx,
+        cfg.note.canvas2x.w,
+        cfg.note.canvas2x.h,
+        cfg.fixedCanvas
+      );
 
-  updateCalcUI();
-  drawPreview();
-}
-bind();
-</script>
+      const note2x = makeCanvas(noteCanvas.w, noteCanvas.h);
+      {
+        const ctx = note2x.getContext("2d");
+        ctx.clearRect(0,0,note2x.width,note2x.height);
+
+        const cx = note2x.width/2;
+        const cy = note2x.height/2 + cfg.note.trail.yOffset;
+
+        // trail behind
+        drawNoteTrail(ctx, cx, cy, noteD2x, note2x.width, note2x.height, cfg.note.trail);
+
+        // circle on top
+        drawCircle(ctx, cx, cy, noteD2x/2, {
+          outlinePx: cfg.note.outlinePx2x,
+          outlineColor: cfg.note.outlineColor,
+          fillMode: cfg.note.fillMode,
+          fillColor: cfg.note.fillColor
+        });
+      }
+
+      const noteDown = downscaleCanvas(note2x, downPct);
+
+      const note2xName = `${cfg.note.prefix}@2x.png`;
+      const noteDownName = `${cfg.note.prefix}.png`;
+
+      const note2xBlob = await canvasToBlob(note2x);
+      const noteDownBlob = await canvasToBlob(noteDown);
+
+      generatedFiles.push({name:note2xName, blob:note2xBlob});
+      generatedFiles.push({name:noteDownName, blob:noteDownBlob});
+
+      addThumb("notes", [
+        {name:note2xName, blob:note2xBlob},
+        {name:noteDownName, blob:noteDownBlob},
+      ]);
+
+      $("fileCount").textContent = `${generatedFiles.length} arquivos`;
+      setStatus("pronto ✅");
+    }
+
+    async function downloadZip(){
+      if(!generatedFiles.length){
+        setStatus("nada pra zipar");
+        return;
+      }
+      if(typeof JSZip === "undefined"){
+        setStatus("JSZip não carregou");
+        alert("JSZip não carregou. Você ainda pode baixar cada PNG individualmente pelos botões.");
+        return;
+      }
+
+      setStatus("zipando…");
+      const zip = new JSZip();
+      const folder = zip.folder("osu-mania");
+      for(const f of generatedFiles){
+        folder.file(f.name, f.blob);
+      }
+      const blob = await zip.generateAsync({type:"blob"});
+      downloadBlob(blob, "osu-mania-images.zip");
+      setStatus("pronto ✅");
+    }
+
+    function bind(){
+      $("genBtn").addEventListener("click", generate);
+      $("zipBtn").addEventListener("click", downloadZip);
+      $("clearBtn").addEventListener("click", clearOut);
+
+      // Small auto-status on input
+      const ids = [
+        "colWidths","keyFactor","noteFactor","downPct","padPx","fixedCanvas",
+        "keyCanvasW","keyCanvasH","noteCanvasW","noteCanvasH",
+        "keyPrefix","keyPressedPrefix","keyOutlineColor","keyOutlinePx","keyFillMode","keyFillColor",
+        "keyPressedOutlineColor","keyPressedOutlinePx","keyPressedFillMode","keyPressedFillColor",
+        "notePrefix","noteOutlineColor","noteOutlinePx","noteFillMode","noteFillColor",
+        "trailOn","trailColor","trailAlpha","trailWidthPct","trailLenPct","trailPower","trailYOffset"
+      ];
+      ids.forEach(id => $(id).addEventListener("input", ()=>setStatus("pronto")));
+
+      clearOut();
+    }
+
+    bind();
+  </script>
 </body>
 </html>
