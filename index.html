@@ -86,7 +86,6 @@
 
     .grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .grid1{ display:grid; grid-template-columns: 1fr; gap:10px; }
-    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
 
     label{
       display:flex; flex-direction:column; gap:6px;
@@ -104,8 +103,6 @@
     }
 
     input[type="color"]{ padding: 5px; height: 38px; }
-    input[type="checkbox"]{ width:auto; transform: translateY(1px); accent-color: white; }
-
     details{
       border:1px solid var(--border);
       border-radius: 14px;
@@ -139,12 +136,12 @@
     .btn.primary{ background: rgba(255,255,255,.16); }
     .btn:active{transform: translateY(1px)}
 
-    /* Right side */
+    /* Right side: ONLY the 4 main previews, no extra preview blocks */
     .rightCol{
+      padding: 14px;
       display:grid;
       grid-template-rows: auto 1fr;
       gap: 14px;
-      padding: 14px;
     }
 
     .previews{
@@ -189,34 +186,50 @@
       background: rgba(255,255,255,.02);
     }
 
-    .out{
-      display:grid;
-      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-      gap: 10px;
-    }
-    .thumb{
+    /* Downloads: compact list (no image previews below) */
+    .downloads{
       border:1px solid var(--border);
       border-radius: 16px;
       background: rgba(0,0,0,.18);
       overflow:hidden;
     }
-    .thumb .top{
-      padding: 10px 10px 8px;
+    .downloadsTop{
+      padding: 10px 12px;
       border-bottom: 1px solid var(--border);
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
     }
-    .thumb b{ font-family: var(--mono); font-size: 12px; font-weight: 800; }
-    .thumb .img{ padding: 10px; display:grid; gap:10px; justify-items:center; }
-    .thumb img{
-      max-width:100%;
-      border-radius: 12px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.02);
+    .downloadsTop b{
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 850;
     }
-    .smallRow{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+    .dlList{
+      padding: 10px;
+      display:grid;
+      gap: 8px;
+    }
+    .dlRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px 10px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.14);
+      border-radius: 14px;
+    }
+    .dlRow span{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,.92);
+    }
+    .dlRow button{
+      padding: 7px 10px;
+      border-radius: 12px;
+    }
 
     .statusLine{
       display:flex;
@@ -238,8 +251,8 @@
       <div>
         <h1>osu!mania • keys + notes (círculos)</h1>
         <div class="sub">
-          4 previews em tempo real (note → LN → key → pressed). Export automático (sem botão “gerar”).
-          Keys @2x fixas em 224×366, centralizadas. Fundo/PNG sempre transparente.
+          Só 4 previews (note → LN → key → pressed). Sem previews “duplicadas” abaixo.
+          Motion blur vai na <b>nota normal</b> (ângulo fixo 90°). Export automático e PNG transparente por padrão.
         </div>
       </div>
       <div class="pill" id="statusPill">pronto</div>
@@ -285,7 +298,7 @@
                   <input id="noteCanvas" value="300x300" />
                 </label>
               </div>
-              <div class="help">Keys @2x são sempre 224×366. Notes você define (ex.: 300x300). Tudo começa “vazio” (transparente).</div>
+              <div class="help">Keys @2x fixas: 224×366. Notes: você define (ex.: 300×300). Tudo transparente por padrão (alphas começam em 0).</div>
             </div>
           </details>
         </div>
@@ -342,38 +355,24 @@
             </label>
           </div>
 
-          <details>
-            <summary>LN efeito: “motion blur” (como no seu exemplo)</summary>
+          <details open>
+            <summary>Motion blur (aplica na NOTE normal) — ângulo fixo 90°</summary>
             <div class="inner grid1">
               <div class="grid">
                 <label>
-                  Ativar motion blur
-                  <select id="mbOn">
-                    <option value="off" selected>não</option>
-                    <option value="on">sim</option>
-                  </select>
+                  Intensidade (0-1)
+                  <input id="mbAlpha" type="number" value="0" min="0" max="1" step="0.01" />
                 </label>
-                <label>
-                  Direção (graus) (90 = pra cima)
-                  <input id="mbAngle" type="number" value="90" min="0" max="360" step="1" />
-                </label>
-              </div>
-
-              <div class="grid">
                 <label>
                   Distância (px)
                   <input id="mbDist" type="number" value="35" min="0" max="600" step="1" />
                 </label>
-                <label>
-                  Blur (px)
-                  <input id="mbBlur" type="number" value="18" min="0" max="200" step="1" />
-                </label>
               </div>
 
               <div class="grid">
                 <label>
-                  Força (0-1)
-                  <input id="mbAlpha" type="number" value="0" min="0" max="1" step="0.01" />
+                  Blur (px)
+                  <input id="mbBlur" type="number" value="18" min="0" max="200" step="1" />
                 </label>
                 <label>
                   Passos (qualidade)
@@ -382,7 +381,7 @@
               </div>
 
               <div class="help">
-                Esse blur é desenhado atrás da nota LN. Se “Força” = 0, fica invisível (padrão).
+                A intensidade controla o quanto o rastro aparece. Como no seu exemplo, é um rastro “suavizado” (blur) puxando pra cima.
               </div>
             </div>
           </details>
@@ -440,26 +439,9 @@
             </label>
           </div>
 
-          <details>
-            <summary>Pressed (override opcional)</summary>
-            <div class="inner grid1">
-              <div class="grid">
-                <label>
-                  Pressed fill opacidade (0-1)
-                  <input id="keyPressedFillA" type="number" value="" placeholder="(vazio = igual)" />
-                </label>
-                <label>
-                  Pressed outline opacidade (0-1)
-                  <input id="keyPressedOutlineA" type="number" value="" placeholder="(vazio = igual)" />
-                </label>
-              </div>
-              <div class="help">Se deixar vazio, herda do normal (com o darken aplicado na cor do fill).</div>
-            </div>
-          </details>
-
-          <div class="row" style="margin-top:10px;">
+          <div class="grid">
             <button class="btn primary" id="zipBtn">Baixar ZIP</button>
-            <button class="btn" id="clearBtn">Reset pra transparente</button>
+            <button class="btn" id="clearBtn">Reset transparente</button>
           </div>
         </div>
 
@@ -474,7 +456,7 @@
     <!-- Right -->
     <section class="card">
       <div class="rightCol">
-        <!-- 4 realtime previews side-by-side -->
+        <!-- 4 main previews only -->
         <div class="previews">
           <div class="pv">
             <div class="pvTop"><b>note</b><span id="pvInfoNote">—</span></div>
@@ -494,8 +476,14 @@
           </div>
         </div>
 
-        <!-- downloads -->
-        <div class="out" id="out"></div>
+        <!-- Download list (no extra image previews) -->
+        <div class="downloads">
+          <div class="downloadsTop">
+            <b>downloads</b>
+            <span class="pill">individual + ZIP</span>
+          </div>
+          <div class="dlList" id="dlList"></div>
+        </div>
       </div>
     </section>
   </div>
@@ -569,20 +557,12 @@
       return "#" + to(r) + to(g) + to(b);
     }
     function darkenHex(hex, delta){
-      // delta -1..1 (negative = darker)
       const {r,g,b} = hexToRgb(hex);
       const f = clamp(1 + delta, 0, 2);
       const rr = clamp(Math.round(r*f), 0, 255);
       const gg = clamp(Math.round(g*f), 0, 255);
       const bb = clamp(Math.round(b*f), 0, 255);
       return rgbToHex(rr,gg,bb);
-    }
-
-    function getOptionalNumber(id){
-      const v = ($(id).value ?? "").trim();
-      if(!v) return null;
-      const n = Number(v);
-      return Number.isFinite(n) ? n : null;
     }
 
     function getCfg(){
@@ -598,25 +578,7 @@
       return {
         cw,
         downPct,
-
-        keyCanvas2x: { w: 224, h: 366 }, // FIXO como você pediu
-
-        key: {
-          prefix: ($("keyPrefix").value.trim() || "mania-key"),
-          pressedPrefix: ($("keyPressedPrefix").value.trim() || "mania-keyD"),
-          factor: keyFactor,
-
-          fillColor: $("keyFillColor").value,
-          fillA: clamp(Number($("keyFillA").value), 0, 1),
-
-          outlineColor: $("keyOutlineColor").value,
-          outlinePx2x: clamp(Number($("keyOutlinePx").value), 0, 999),
-          outlineA: clamp(Number($("keyOutlineA").value), 0, 1),
-
-          pressedDelta: clamp(Number($("keyPressedDelta").value), -1, 1),
-          pressedFillA: (()=>{ const n=getOptionalNumber("keyPressedFillA"); return n===null?null:clamp(n,0,1); })(),
-          pressedOutlineA: (()=>{ const n=getOptionalNumber("keyPressedOutlineA"); return n===null?null:clamp(n,0,1); })(),
-        },
+        keyCanvas2x: { w: 224, h: 366 },
 
         note: {
           prefix: ($("notePrefix").value.trim() || "mania-note"),
@@ -633,19 +595,34 @@
           yOffset: clamp(Number($("noteYOffset").value), -9999, 9999),
           canvas2x: noteCanvas,
 
-          motionBlur: {
-            on: $("mbOn").value === "on",
-            angleDeg: ((Number($("mbAngle").value)%360)+360)%360,
+          // Motion blur settings: angle fixed 90°
+          mb: {
+            alpha: clamp(Number($("mbAlpha").value), 0, 1),
             dist: clamp(Number($("mbDist").value), 0, 2000),
             blur: clamp(Number($("mbBlur").value), 0, 2000),
-            alpha: clamp(Number($("mbAlpha").value), 0, 1),
             steps: clamp(Number($("mbSteps").value), 2, 300),
+            angleDeg: 90
           }
+        },
+
+        key: {
+          prefix: ($("keyPrefix").value.trim() || "mania-key"),
+          pressedPrefix: ($("keyPressedPrefix").value.trim() || "mania-keyD"),
+          factor: keyFactor,
+
+          fillColor: $("keyFillColor").value,
+          fillA: clamp(Number($("keyFillA").value), 0, 1),
+
+          outlineColor: $("keyOutlineColor").value,
+          outlinePx2x: clamp(Number($("keyOutlinePx").value), 0, 999),
+          outlineA: clamp(Number($("keyOutlineA").value), 0, 1),
+
+          pressedDelta: clamp(Number($("keyPressedDelta").value), -1, 1),
         }
       };
     }
 
-    // ColumnWidth is treated as @1x baseline: d@1x = cw*factor, d@2x = d@1x*2
+    // d@1x = cw*factor, d@2x = *2
     function diameter2xFromCW(cw, factor){
       const d1 = cw * factor;
       return Math.max(1, Math.round(d1 * 2));
@@ -657,8 +634,13 @@
       return Math.max(0.5, rr - o/2);
     }
 
+    function rgba(hex, a){
+      const {r,g,b} = hexToRgb(hex);
+      return `rgba(${r},${g},${b},${a})`;
+    }
+
     function drawCircle(ctx, cx, cy, r, opts){
-      // No default fill/outline unless alpha > 0 (keeps PNG transparent by default)
+      // Transparent by default: only draw if alpha > 0
       const fillA = clamp(opts.fillA ?? 0, 0, 1);
       const outlineA = clamp(opts.outlineA ?? 0, 0, 1);
       const outlinePx = Math.max(0, opts.outlinePx||0);
@@ -676,7 +658,7 @@
         ctx.beginPath();
         ctx.arc(cx, cy, rr, 0, Math.PI*2);
         ctx.closePath();
-        ctx.fillStyle = `rgba(${hexToRgb(fillColor).r},${hexToRgb(fillColor).g},${hexToRgb(fillColor).b},${fillA})`;
+        ctx.fillStyle = rgba(fillColor, fillA);
         ctx.fill();
       }
 
@@ -684,8 +666,7 @@
         ctx.beginPath();
         ctx.arc(cx, cy, rr, 0, Math.PI*2);
         ctx.closePath();
-        const rgb = hexToRgb(outlineColor);
-        ctx.strokeStyle = `rgba(${rgb.r},${rgb.g},${rgb.b},${outlineA})`;
+        ctx.strokeStyle = rgba(outlineColor, outlineA);
         ctx.lineWidth = outlinePx;
         ctx.stroke();
       }
@@ -693,44 +674,40 @@
       ctx.restore();
     }
 
-    // Motion blur: draw many blurred stamps of the circle along a vector (behind the LN note)
-    function drawMotionBlurTrail(ctx, cx, cy, r, blurCfg, circleStyle){
-      if(!blurCfg.on) return;
-      if(blurCfg.alpha <= 0) return;
-      if(blurCfg.dist <= 0) return;
-      if(circleStyle.fillA <= 0 && circleStyle.outlineA <= 0) return; // nothing to blur
+    // Motion blur behind a circle: stamps along a vector with blur filter
+    function drawMotionBlur(ctx, cx, cy, r, mb, circleStyle){
+      if(mb.alpha <= 0) return;
+      if(mb.dist <= 0) return;
+      if(circleStyle.fillA <= 0 && circleStyle.outlineA <= 0) return;
 
-      const steps = Math.max(2, Math.floor(blurCfg.steps));
-      const ang = (blurCfg.angleDeg * Math.PI) / 180;
+      const steps = Math.max(2, Math.floor(mb.steps));
+      const ang = (mb.angleDeg * Math.PI) / 180;
       const dx = Math.cos(ang);
-      const dy = -Math.sin(ang); // canvas y+ is down; angle=90 should go UP, hence -sin
+      const dy = -Math.sin(ang); // 90° should go up
 
-      // We'll blur the WHOLE stamp; easiest is using ctx.filter
       ctx.save();
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
-      ctx.filter = blurCfg.blur > 0 ? `blur(${blurCfg.blur}px)` : "none";
-      ctx.globalCompositeOperation = "source-over";
+      ctx.filter = mb.blur > 0 ? `blur(${mb.blur}px)` : "none";
 
-      // Stronger near circle, fading away
+      // Only blur the fill by default (matches your example best)
+      const baseFillA = circleStyle.fillA > 0 ? circleStyle.fillA : circleStyle.outlineA;
+      const useFill = circleStyle.fillA > 0;
+
       for(let i=1;i<=steps;i++){
-        const t = i/steps; // 0..1
-        const ox = dx * blurCfg.dist * t;
-        const oy = dy * blurCfg.dist * t;
+        const t = i/steps;
+        const ox = dx * mb.dist * t;
+        const oy = dy * mb.dist * t;
 
-        // alpha curve (quadratic falloff) * user alpha
-        const a = blurCfg.alpha * (1 - t) * (1 - t);
-
-        // draw just the FILL portion for the blur (usually what you want like your example)
-        // if fillA=0, we can blur the outline instead, but default effect is fill-blur.
-        const useFillA = (circleStyle.fillA > 0 ? circleStyle.fillA : circleStyle.outlineA) * a;
+        // alpha falloff
+        const a = mb.alpha * (1 - t) * (1 - t);
 
         drawCircle(ctx, cx + ox, cy + oy, r, {
           fillColor: circleStyle.fillColor,
-          fillA: useFillA,
+          fillA: useFill ? (baseFillA * a) : 0,
           outlineColor: circleStyle.outlineColor,
           outlinePx: circleStyle.outlinePx,
-          outlineA: (circleStyle.fillA > 0 ? 0 : circleStyle.outlineA * a) // only if no fill
+          outlineA: useFill ? 0 : (circleStyle.outlineA * a)
         });
       }
 
@@ -741,7 +718,7 @@
       const d2x = diameter2xFromCW(cfg.cw, cfg.note.factor);
       const c = makeCanvas(cfg.note.canvas2x.w, cfg.note.canvas2x.h);
       const ctx = c.getContext("2d");
-      ctx.clearRect(0,0,c.width,c.height); // transparent background
+      ctx.clearRect(0,0,c.width,c.height);
 
       const cx = c.width/2;
       const cy = c.height/2 + cfg.note.yOffset;
@@ -755,41 +732,38 @@
         outlineA: cfg.note.outlineA
       };
 
-      // LN blur behind (no “trilha em cima”, é motion blur tipo seu exemplo)
-      if(isLN){
-        drawMotionBlurTrail(ctx, cx, cy, r, cfg.note.motionBlur, circleStyle);
+      // ✅ Motion blur on NOTE NORMAL only (as requested)
+      if(!isLN){
+        drawMotionBlur(ctx, cx, cy, r, cfg.note.mb, circleStyle);
       }
 
-      // main note circle on top
+      // Main circle on top
       drawCircle(ctx, cx, cy, r, circleStyle);
 
-      return { canvas: c, d2x };
+      return c;
     }
 
     function renderKeyCanvas(cfg, pressed){
       const d2x = diameter2xFromCW(cfg.cw, cfg.key.factor);
-      const c = makeCanvas(cfg.keyCanvas2x.w, cfg.keyCanvas2x.h); // FIXO 224x366
+      const c = makeCanvas(cfg.keyCanvas2x.w, cfg.keyCanvas2x.h);
       const ctx = c.getContext("2d");
-      ctx.clearRect(0,0,c.width,c.height); // transparent background
+      ctx.clearRect(0,0,c.width,c.height);
 
       const cx = c.width/2;
       const cy = c.height/2;
       const r = d2x/2;
 
-      const baseFill = pressed ? darkenHex(cfg.key.fillColor, cfg.key.pressedDelta) : cfg.key.fillColor;
-
-      const fillA = pressed && cfg.key.pressedFillA !== null ? cfg.key.pressedFillA : cfg.key.fillA;
-      const outlineA = pressed && cfg.key.pressedOutlineA !== null ? cfg.key.pressedOutlineA : cfg.key.outlineA;
+      const fillColor = pressed ? darkenHex(cfg.key.fillColor, cfg.key.pressedDelta) : cfg.key.fillColor;
 
       drawCircle(ctx, cx, cy, r, {
-        fillColor: baseFill,
-        fillA,
+        fillColor,
+        fillA: cfg.key.fillA,
         outlineColor: cfg.key.outlineColor,
         outlinePx: cfg.key.outlinePx2x,
-        outlineA
+        outlineA: cfg.key.outlineA
       });
 
-      return { canvas: c, d2x };
+      return c;
     }
 
     function paintPreview(previewCanvas, srcCanvas){
@@ -809,82 +783,39 @@
       ctx.drawImage(srcCanvas, dx, dy, dw, dh);
     }
 
-    function addThumb(title, items){
-      const out = $("out");
-      const wrap = document.createElement("div");
-      wrap.className = "thumb";
-
-      const top = document.createElement("div");
-      top.className = "top";
-      const b = document.createElement("b");
-      b.textContent = title;
-      top.appendChild(b);
-
-      const imgBox = document.createElement("div");
-      imgBox.className = "img";
-
-      items.forEach(({name, blob})=>{
-        const url = URL.createObjectURL(blob);
-        const img = document.createElement("img");
-        img.src = url;
-        img.alt = name;
-        imgBox.appendChild(img);
+    function buildDownloadList(files){
+      const dl = $("dlList");
+      dl.innerHTML = "";
+      files.forEach(({name, blob})=>{
+        const row = document.createElement("div");
+        row.className = "dlRow";
+        const s = document.createElement("span");
+        s.textContent = name;
+        const b = document.createElement("button");
+        b.className = "btn primary";
+        b.textContent = "baixar";
+        b.onclick = ()=>downloadBlob(blob, name);
+        row.appendChild(s);
+        row.appendChild(b);
+        dl.appendChild(row);
       });
-
-      const btnRow = document.createElement("div");
-      btnRow.className = "smallRow";
-      items.forEach(({name, blob})=>{
-        const btn = document.createElement("button");
-        btn.className = "btn";
-        btn.style.padding = "7px 10px";
-        btn.textContent = "baixar " + name;
-        btn.onclick = ()=>downloadBlob(blob, name);
-        btnRow.appendChild(btn);
-      });
-
-      imgBox.appendChild(btnRow);
-
-      wrap.appendChild(top);
-      wrap.appendChild(imgBox);
-      out.appendChild(wrap);
     }
 
     let generatedFiles = [];
-    let latestCfgForZip = null;
+    let busy = false;
+    let queued = false;
+    let tmr = null;
 
-    function clearOutAndResetDefaults(){
-      // Reset everything to "transparent default"
-      $("noteFillA").value = "0";
-      $("noteOutlinePx").value = "0";
-      $("noteOutlineA").value = "0";
-      $("mbAlpha").value = "0";
-
-      $("keyFillA").value = "0";
-      $("keyOutlinePx").value = "0";
-      $("keyOutlineA").value = "0";
-      $("keyPressedDelta").value = "0";
-      $("keyPressedFillA").value = "";
-      $("keyPressedOutlineA").value = "";
-
-      $("out").innerHTML = "";
-      generatedFiles = [];
-      $("fileCount").textContent = "0 arquivos";
-      setStatus("limpo");
-
-      scheduleUpdate();
-    }
-
-    async function regenerateFilesAndUI(){
+    async function regenerateAll(){
       const cfg = getCfg();
-      latestCfgForZip = cfg;
 
-      // --- Render source canvases ---
-      const noteN = renderNoteCanvas(cfg, false).canvas;
-      const noteL = renderNoteCanvas(cfg, true).canvas;
-      const keyN  = renderKeyCanvas(cfg, false).canvas;
-      const keyP  = renderKeyCanvas(cfg, true).canvas;
+      // Render base canvases
+      const noteN = renderNoteCanvas(cfg, false);
+      const noteL = renderNoteCanvas(cfg, true);
+      const keyN  = renderKeyCanvas(cfg, false);
+      const keyP  = renderKeyCanvas(cfg, true);
 
-      // --- Previews ---
+      // Previews
       paintPreview($("pvNote"), noteN);
       paintPreview($("pvLn"),   noteL);
       paintPreview($("pvKey"),  keyN);
@@ -895,64 +826,48 @@
       $("pvInfoKey").textContent  = `${keyN.width}×${keyN.height}`;
       $("pvInfoKeyP").textContent = `${keyP.width}×${keyP.height}`;
 
-      // --- Build export canvases (downscale) ---
+      // Downscales
       const noteNDown = downscaleCanvas(noteN, cfg.downPct);
       const noteLDown = downscaleCanvas(noteL, cfg.downPct);
       const keyNDown  = downscaleCanvas(keyN, cfg.downPct);
       const keyPDown  = downscaleCanvas(keyP, cfg.downPct);
 
       // Names
-      const noteN2xName = `${cfg.note.prefix}@2x.png`;
-      const noteN1xName = `${cfg.note.prefix}.png`;
-      const noteL2xName = `${cfg.note.lnPrefix}@2x.png`;
-      const noteL1xName = `${cfg.note.lnPrefix}.png`;
-
-      const keyN2xName  = `${cfg.key.prefix}@2x.png`;
-      const keyN1xName  = `${cfg.key.prefix}.png`;
-      const keyP2xName  = `${cfg.key.pressedPrefix}@2x.png`;
-      const keyP1xName  = `${cfg.key.pressedPrefix}.png`;
-
-      // Blobs
-      const [
-        noteN2xBlob, noteN1xBlob,
-        noteL2xBlob, noteL1xBlob,
-        keyN2xBlob,  keyN1xBlob,
-        keyP2xBlob,  keyP1xBlob
-      ] = await Promise.all([
-        canvasToBlob(noteN), canvasToBlob(noteNDown),
-        canvasToBlob(noteL), canvasToBlob(noteLDown),
-        canvasToBlob(keyN),  canvasToBlob(keyNDown),
-        canvasToBlob(keyP),  canvasToBlob(keyPDown)
-      ]);
-
-      generatedFiles = [
-        {name: noteN2xName, blob: noteN2xBlob},
-        {name: noteN1xName, blob: noteN1xBlob},
-        {name: noteL2xName, blob: noteL2xBlob},
-        {name: noteL1xName, blob: noteL1xBlob},
-        {name: keyN2xName,  blob: keyN2xBlob},
-        {name: keyN1xName,  blob: keyN1xBlob},
-        {name: keyP2xName,  blob: keyP2xBlob},
-        {name: keyP1xName,  blob: keyP1xBlob},
+      const filesSpec = [
+        {name: `${cfg.note.prefix}@2x.png`, canvas: noteN},
+        {name: `${cfg.note.prefix}.png`, canvas: noteNDown},
+        {name: `${cfg.note.lnPrefix}@2x.png`, canvas: noteL},
+        {name: `${cfg.note.lnPrefix}.png`, canvas: noteLDown},
+        {name: `${cfg.key.prefix}@2x.png`, canvas: keyN},
+        {name: `${cfg.key.prefix}.png`, canvas: keyNDown},
+        {name: `${cfg.key.pressedPrefix}@2x.png`, canvas: keyP},
+        {name: `${cfg.key.pressedPrefix}.png`, canvas: keyPDown},
       ];
 
-      // Output UI
-      $("out").innerHTML = "";
-      addThumb("notes", [
-        {name:noteN2xName, blob:noteN2xBlob},
-        {name:noteN1xName, blob:noteN1xBlob},
-        {name:noteL2xName, blob:noteL2xBlob},
-        {name:noteL1xName, blob:noteL1xBlob},
-      ]);
-      addThumb("keys", [
-        {name:keyN2xName, blob:keyN2xBlob},
-        {name:keyN1xName, blob:keyN1xBlob},
-        {name:keyP2xName, blob:keyP2xBlob},
-        {name:keyP1xName, blob:keyP1xBlob},
-      ]);
+      const blobs = await Promise.all(filesSpec.map(x=>canvasToBlob(x.canvas)));
+      generatedFiles = filesSpec.map((x,i)=>({name:x.name, blob:blobs[i]}));
 
+      buildDownloadList(generatedFiles);
       $("fileCount").textContent = `${generatedFiles.length} arquivos`;
       setStatus("pronto ✅");
+    }
+
+    function scheduleUpdate(){
+      if(tmr) clearTimeout(tmr);
+      tmr = setTimeout(async ()=>{
+        if(busy){ queued = true; return; }
+        busy = true;
+        setStatus("…");
+        try{
+          await regenerateAll();
+        }catch(e){
+          console.error(e);
+          setStatus("erro");
+        }finally{
+          busy = false;
+          if(queued){ queued = false; scheduleUpdate(); }
+        }
+      }, 160);
     }
 
     async function downloadZip(){
@@ -962,7 +877,7 @@
       }
       if(typeof JSZip === "undefined"){
         setStatus("JSZip não carregou");
-        alert("JSZip não carregou. Você ainda pode baixar cada PNG individualmente.");
+        alert("JSZip não carregou. Baixe individualmente.");
         return;
       }
       setStatus("zipando…");
@@ -976,71 +891,50 @@
       setStatus("pronto ✅");
     }
 
-    // Debounce updates so typing doesn't spam blob creation
-    let tmr = null;
-    let busy = false;
-    let queued = false;
+    function resetTransparentDefaults(){
+      // ensure everything is "nothing by default"
+      $("noteFillA").value = "0";
+      $("noteOutlinePx").value = "0";
+      $("noteOutlineA").value = "0";
+      $("mbAlpha").value = "0";
 
-    function scheduleUpdate(){
-      if(tmr) clearTimeout(tmr);
-      tmr = setTimeout(async ()=>{
-        if(busy){
-          queued = true;
-          return;
-        }
-        busy = true;
-        try{
-          await regenerateFilesAndUI();
-        }catch(err){
-          console.error(err);
-          setStatus("erro");
-        }finally{
-          busy = false;
-          if(queued){
-            queued = false;
-            scheduleUpdate();
-          }
-        }
-      }, 180);
+      $("keyFillA").value = "0";
+      $("keyOutlinePx").value = "0";
+      $("keyOutlineA").value = "0";
+      $("keyPressedDelta").value = "0";
+
+      scheduleUpdate();
     }
 
     function bindRealtime(){
       const ids = [
         "colWidths","keyFactor","noteFactor","downPct","noteCanvas",
-
         "notePrefix","noteLnPrefix",
         "noteFillColor","noteFillA",
         "noteOutlineColor","noteOutlinePx","noteOutlineA",
         "noteYOffset",
-
-        "mbOn","mbAngle","mbDist","mbBlur","mbAlpha","mbSteps",
-
+        "mbAlpha","mbDist","mbBlur","mbSteps",
         "keyPrefix","keyPressedPrefix",
         "keyFillColor","keyFillA",
         "keyOutlineColor","keyOutlinePx","keyOutlineA",
-        "keyPressedDelta","keyPressedFillA","keyPressedOutlineA"
+        "keyPressedDelta"
       ];
-
       ids.forEach(id=>{
         const el = $(id);
-        el.addEventListener("input", ()=>{ setStatus("…"); scheduleUpdate(); });
-        el.addEventListener("change", ()=>{ setStatus("…"); scheduleUpdate(); });
+        el.addEventListener("input", scheduleUpdate);
+        el.addEventListener("change", scheduleUpdate);
       });
     }
 
     function bind(){
       $("zipBtn").addEventListener("click", downloadZip);
-      $("clearBtn").addEventListener("click", clearOutAndResetDefaults);
-
+      $("clearBtn").addEventListener("click", resetTransparentDefaults);
       bindRealtime();
 
-      // Start clean/transparent by default
-      $("out").innerHTML = "";
-      generatedFiles = [];
+      // Start with transparent defaults and auto-generate
+      $("dlList").innerHTML = "";
       $("fileCount").textContent = "0 arquivos";
       setStatus("pronto");
-
-      // First auto-gen (will still be transparent until you raise alphas)
       scheduleUpdate();
     }
 
